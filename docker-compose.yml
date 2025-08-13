@@ -1,0 +1,25 @@
+services:
+  mongo:
+    image: mongo:5.0  # Usa una versión específica para evitar problemas con la versión más reciente.
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/ecommerce
+      - JWT_SECRET=karolsuperclave123
+    command: node app.js
+
+volumes:
+  mongo-data:
+

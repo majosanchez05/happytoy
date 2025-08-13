@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="login-page">
+  <div class="form-container">
+    <div class="logo">
+      <a href="index.html">
+        <img src="images/logo.png" alt="Happy toys Logo"style="width: 250px; height: auto; margin-bottom: 0.0rem;" />
+      </a>
+    </div>
+    <h2 class="form-title">Iniciar sesión</h2>
+    <form id="loginForm" class="login-form">
+      <div class="input-group">
+        <input type="email" id="email" class="input-field" placeholder="Correo electrónico" required><br>
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" class="input-field" placeholder="Contraseña" required><br>
+      </div>
+      <!-- Botón de submit -->
+      <button type="submit" class="submit-button">Entrar</button>
+    </form>
+    <div class="links">
+      <a href="register.html">¿No tienes una cuenta? Regístrate</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const response = await fetch("http://localhost:3001/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Bienvenido " + data.user.name);
+        localStorage.setItem("token", data.token);
+        const usuario = {
+          name: data.user.name,
+          email: data.user.email
+        };
+        localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
+        window.location.href = "index.html";
+      } else {
+        alert(data.msg || "Error al iniciar sesión");
+      }
+    });
+  </script>
+</body>
+</html>

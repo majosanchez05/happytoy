@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Toys</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <header>
+    <div class="nav-container">
+      <!-- Logo -->
+      <div class="logo">
+        <a href="index.html">
+          <img src="images/logo.png" alt="Happy toys Logo" />
+        </a>
+      </div>
+
+      <!-- Barra de Búsqueda -->
+      <div class="search-bar">
+        <input type="text" placeholder="Diversión al alcance de un clic..." />
+        <button type="submit"><img src="images/icon-buscar.png" alt="Buscar" /></button>
+      </div>
+    </div>
+
+    <!-- Botón Hamburguesa (solo visible en móviles) -->
+    <div class="hamburger">☰</div>
+
+    <nav class="navbar-bottom">
+      <div class="location">
+        <span>📍 Ingresa tu ubicación</span>
+      </div>
+      <ul class="nav-links">
+        <!-- Categorías con submenús -->
+        <li class="dropdown">
+          <a>Categorías</a>
+          <ul class="dropdown-menu">
+            <li class="sub-dropdown">
+              <a>Edad &gt;</a>
+              <ul class="sub-dropdown-menu">
+                <li><a href="products.html?categoria=Edad&subcategoria=Beb%C3%A9s%20(0-2%20años)">Bebés (0‑2 años)</a></li>
+                <li><a href="products.html?categoria=Edad&subcategoria=Ni%C3%B1os%20(3-6%20años)">Niños (3‑6 años)</a></li>
+                <li><a href="products.html?categoria=Edad&subcategoria=Mayores%20de%207%20años">Mayores de 7 años</a></li>
+              </ul>
+            </li>
+            <li class="sub-dropdown">
+              <a>Tipo de Juguete &gt;</a>
+              <ul class="sub-dropdown-menu">
+                <li><a href="products.html?categoria=Tipo%20de%20Juguete&subcategoria=Mu%C3%B1ecos%20y%20Figuras">Muñecos y Figuras</a></li>
+                <li><a href="products.html?categoria=Tipo%20de%20Juguete&subcategoria=Juegos%20de%20Mesa">Juegos de Mesa</a></li>
+                <li><a href="products.html?categoria=Tipo%20de%20Juguete&subcategoria=Veh%C3%ADculos">Vehículos</a></li>
+                <li><a href="products.html?categoria=Tipo%20de%20Juguete&subcategoria=Creativos%20y%20Educativos">Creativos y Educativos</a></li>
+              </ul>
+            </li>
+            <li><a href="products.html?categoria=Deportes%20y%20Aire%20Libre">Deportes y Aire Libre</a></li>
+            <li><a href="products.html?categoria=Ofertas">Ofertas</a></li>
+          </ul>
+        </li>
+
+        <li><a href="index.html#about-section">Acerca de</a></li>
+        <li><a href="index.html#contacto">Contacto</a></li>
+
+        <!-- Enlaces de invitado (mostrar si NO hay sesión) -->
+        <li class="auth-guest"><a href="register.html">Crea tu cuenta</a></li>
+        <li class="auth-guest"><a href="login.html">Ingresa</a></li>
+
+        <!-- Enlaces de usuario logueado (ocultos por defecto) -->
+        <li class="auth-user" style="display: none;">
+          <span id="user-name"></span>
+        </li>
+        <li class="auth-user" style="display: none;">
+          <a href="#" id="logout-link">Cerrar sesión</a>
+        </li>
+
+        <li><a href="miscompras.html">Mis compras</a></li>
+        <li class="cart-icon">
+          <a href="javascript:void(0);" onclick="openCartModal()">🛒 <span id="cart-count">0</span></a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Carrito Modal -->
+  <div id="cartModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Su Carrito</h2>
+      <div id="contenedor-carrito"></div>
+      <div class="cart-summary">
+        <p><strong>Subtotal:</strong> <span id="subtotal">$0 COP</span>
+        <p><strong>Envío:</strong> <span id="shipping-cost">$10,000 COP</span></p>
+        <hr>
+        <p><strong>Total:</strong> <span id="total">$0 COP</span></p>
+        <button onclick="checkout()" class="checkout-button">Continuar compra</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

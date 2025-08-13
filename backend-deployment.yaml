@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: happytoys-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: happytoys-backend
+  template:
+    metadata:
+      labels:
+        app: happytoys-backend
+    spec:
+      containers:
+        - name: happytoys-backend
+          image: tu-usuario-dockerhub/happytoys-backend:latest  # O build local en Minikube
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URI
+              value: mongodb://mongo-service:27017/ecommerce
+            - name: JWT_SECRET
+              value: karolsuperclave123

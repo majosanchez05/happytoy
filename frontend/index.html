@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy toys</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <!-- Contenido principal -->
+    <main>
+        <div class="hero" style="background-image: url('images/principal.jpg'); background-size: cover; background-position: center; height: 60vh;">
+            <div class="hero-content">
+                <p class="intro-text">¡Bienvenido a ToyStore!</p>
+                <h1>La mejor tienda <br>de productos <br>para niños</h1>
+                <button class="catalog-button" onclick="window.location.href='products.html'">Ver Catálogo</button>
+            </div>
+        </div>
+        <!-- Carrusel de Productos -->
+        <section class="carousel-section">
+          <h2 class="carousel-title">Nuestros Productos</h2>
+          
+          <div class="carousel-wrapper">
+            <!-- Botón izquierdo -->
+            <button id="prevBtn" class="carousel-btn left">←</button>
+        
+            <div id="carousel-container" class="carousel-container">
+              <div class="carousel-slide">
+                  <img src="images/producto1.jpg" alt="Producto 1">
+                  <img src="images/producto2.jpg" alt="Producto 2">
+                  <img src="images/producto3.jpg" alt="Producto 3">
+                  <img src="images/producto4.jpg" alt="Producto 4">
+              </div>
+            </div>
+        
+            <!-- Botón derecho -->
+            <button id="nextBtn" class="carousel-btn right">→</button>
+          </div>
+        
+        </section>
+        
+        <!-- Sección Acerca de -->
+        <section id="about-section" class="about">
+            <div class="about-content">
+                <img src="images/mono.jpg" alt="Imagen de juguetes">
+                <div class="about-text">
+                    <h2>¡Todo lo que necesitas es diversión!</h2>
+                    <p>Presentación de ToyStore</p>
+                    <p>Un plan de marketing exitoso depende en gran medida del poder de atracción del texto publicitario. Escribir un texto publicitario orientado a resultados es difícil, ya que debe atraer, seducir y convencer a los consumidores para que actúen.</p>
+                </div>
+            </div>
+
+            <div class="about-extra">
+                <img src="images/res.jpg" alt="Juguetes educativos" class="about-extra-image">
+                <div class="about-extra-text">
+                    <h2>100% Responsivo</h2>
+                    <p>Un plan de marketing exitoso depende en gran medida del poder de atracción del texto publicitario. Escribir un texto publicitario orientado a resultados es difícil, ya que debe atraer, seducir y convencer a los consumidores para que actúen. No existe una fórmula mágica para escribir un texto publicitario perfecto.</p>
+                    <a href="products.html" class="explore-link">Explora nuestros juguetes →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Contacto -->
+        <section id="contacto" class="contact-section">
+            <div class="contact-container">
+                <!-- Formulario de contacto -->
+                <div class="contact-form">
+                    <h2>Deja un mensaje</h2>
+                    <form>
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" placeholder="Ingresa tu nombre" required>
+
+                        <label for="email">Dirección de correo electrónico</label>
+                        <input type="email" id="email" placeholder="Tu correo electrónico de contacto" required>
+
+                        <label for="mensaje">Texto del mensaje</label>
+                        <textarea id="mensaje" rows="5" placeholder="Texto del mensaje..." required></textarea>
+
+                        <button type="submit" class="send-button">Enviar mensaje</button>
+                    </form>
+                </div>
+                
+                <!-- Información de contacto -->
+                <div class="contact-info">
+                    <h3>Información de contacto</h3>
+                    <p>4293 Euclid Avenue, Los Ángeles, CA 90012</p>
+                    <p>+1 213 974-3898</p>
+                    <p><a href="mailto:toystore@template.com">toystore@template.com</a></p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2024 ToyStore. Todos los derechos reservados.</p>
+                <p>Política de Privacidad | Términos y Condiciones</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/cart.js"></script>
+    <script>
+        // 1) Cargar el header y agregar la funcionalidad del botón hamburguesa
+        window.addEventListener('DOMContentLoaded', () => {
+          fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('header-container').innerHTML = data;
+
+              // Aquí ejecutamos el script de sesión después de insertar el header
+              setupAuthUI(); // Configura la UI de autenticación
+              setupHamburgerMenu(); // Funcionalidad del botón hamburguesa
+            })
+            .catch(console.error);
+        });
+
+        // 2) Función que muestra/oculta enlaces de sesión
+        function setupAuthUI() {
+          const usuario = JSON.parse(localStorage.getItem('usuarioLogueado'));
+          if (usuario && usuario.name) {
+            // Ocultar los de invitado
+            document.querySelectorAll('.auth-guest')
+              .forEach(el => el.style.display = 'none');
+            // Mostrar los de usuario
+            document.querySelectorAll('.auth-user')
+              .forEach(el => el.style.display = 'inline-block');
+            // Poner el nombre
+            document.getElementById('user-name').textContent = `Hola, ${usuario.name}`;
+            // Asociar botón de logout
+            document.getElementById('logout-link').addEventListener('click', e => {
+              e.preventDefault();
+              localStorage.removeItem('token');
+              localStorage.removeItem('usuarioLogueado');
+              location.reload();
+            });
+          }
+        }
+
+        // 3) Función que agrega la funcionalidad del botón hamburguesa
+        function setupHamburgerMenu() {
+          const hamburger = document.querySelector('.hamburger');
+          const navLinks = document.querySelector('.nav-links');
+          
+          if (hamburger && navLinks) {
+            hamburger.addEventListener('click', function () {
+              navLinks.classList.toggle('show');
+            });
+          }
+        }
+
+        function cargarProductosCarrusel() {
+          fetch('http://localhost:3001/api/products')
+            .then(res => res.json())
+            .then(productos => {
+              const carouselContainer = document.getElementById('carousel-container');
+              carouselContainer.innerHTML = ''; // Limpiar primero por si acaso
+
+              productos.forEach(producto => {
+                const slide = document.createElement('div');
+                slide.classList.add('carousel-slide'); // 👈 Asegúrate de que esta clase tenga estilos en tu CSS
+                slide.innerHTML = `
+                  <img src="${producto.imagen}" alt="${producto.nombre}">
+                  <div class="carousel-caption">
+                    <h3>${producto.nombre}</h3>
+                    <p>$${producto.precio.toLocaleString('es-CO')}</p>
+                    <button onclick="addToCart('${producto._id}', '${producto.nombre}', ${producto.precio}, '${producto.imagen}')" class="add-to-cart-button">Añadir al carrito</button>
+                  </div>
+                `;
+                carouselContainer.appendChild(slide);
+              });
+
+              inicializarCarrusel(); // 👉 Llama a tu función para que el carrusel funcione después de cargar productos
+            })
+            .catch(error => {
+              console.error('Error al cargar productos en carrusel:', error);
+            });
+        }
+
+      function inicializarCarrusel() {
+          // Aquí iría el código para que tu carrusel funcione (por ejemplo, inicializar Swiper, Slick, etc.)
+          // O si es un carrusel hecho a mano, inicializarlo manualmente
+          console.log('Carrusel inicializado');
+      }
+
+        document.addEventListener('DOMContentLoaded', cargarProductosCarrusel);
+
+        const carousel = document.getElementById('carousel-container');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        prevBtn.addEventListener('click', () => {
+          carousel.scrollBy({
+            left: -300, // Ajusta este valor según el tamaño de tus imágenes
+            behavior: 'smooth'
+          });
+        });
+
+        nextBtn.addEventListener('click', () => {
+          carousel.scrollBy({
+            left: 300, // Ajusta este valor igual
+            behavior: 'smooth'
+          });
+        });
+
+
+    </script>
+</body>
+</html>

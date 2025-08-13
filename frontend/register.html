@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro</title>
+  <!-- Conectar el archivo CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="register-page">
+  <div class="form-container">
+    <div class="logo">
+      <a href="index.html">
+        <img src="images/logo.png" alt="Happy toys Logo"style="width: 250px; height: auto; margin-bottom: 0.0rem;" />
+      </a>
+    </div>
+    <h2 class="form-title">Crear cuenta</h2>
+    <form id="registerForm" class="register-form">
+      <div class="input-group">
+        <input type="text" id="name" class="input-field" placeholder="Nombre" required><br>
+      </div>
+      <div class="input-group">
+        <input type="email" id="email" class="input-field" placeholder="Correo electrónico" required><br>
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" class="input-field" placeholder="Contraseña" required><br>
+      </div>
+      <!-- Botón de submit -->
+      <button type="submit" class="submit-button">Registrarse</button>
+    </form>
+  </div>
+
+  <script>
+    if (localStorage.getItem("token")) {
+      window.location.href = "index.html";
+    }
+
+    const form = document.getElementById("registerForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const response = await fetch("http://localhost:3001/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+      });
+
+      const data = await response.json();
+      alert(data.msg);
+      if (response.status === 201) window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

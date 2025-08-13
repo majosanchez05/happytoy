@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Toys - Carrito</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="cartModal" class="cart-modal">
+    <div class="cart-header">
+      <h2>🛒 Su Carrito</h2>
+      <button class="close-button" onclick="closeCartModal()">✖</button>
+    </div>
+    <div class="cart-content">
+      <!-- Aquí se renderizan los productos con JS -->
+  
+      <div class="cart-item">
+        <img src="ruta-de-la-imagen.jpg" alt="Producto">
+        <div class="item-details">
+          <h3>Nombre del producto</h3>
+          <p>Precio: $XX.XXX COP</p>
+          
+          <div class="cart-item">
+            <img src="ruta-de-la-imagen.jpg" alt="Producto">
+            <div class="item-details">
+              <h3>Nombre del producto</h3>
+              <p>Precio: $XX.XXX COP</p>
+          
+              <div class="cantidad-container">
+                <div class="cantidad">
+                  <button class="decrease">-</button>
+                  <span class="cantidad-numero">2</span>
+                  <button class="increase">+</button>
+                </div>
+                <button class="eliminar">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+           
+  
+      <div class="cart-summary">
+        <p><strong>Subtotal:</strong> <span id="subtotal">$0 COP</span></p>
+        <p><strong>Envío:</strong> <span id="shipping-cost">$10.000 COP</span></p>
+        <hr />
+        <p><strong>Total:</strong> <span id="total">$0 COP</span></p>
+        <button class="checkout-button" onclick="checkout()">Continuar compra</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="js/cart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Cargar header con lógica de autenticación
+      const header = await fetch('header.html').then(res => res.text());
+      document.getElementById('header-container').innerHTML = header;
+      setupAuthUI?.();
+
+      await cargarCarrito('cartItems');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Toys - Catálogo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="header-container"></div>
+
+  <main>
+    <h1>Catálogo de Productos</h1>
+
+    <!-- Filtros -->
+    <section class="filters">
+      <div class="filter-group">
+        <label for="categoria">Categoría:</label>
+        <select id="categoria">
+          <option value="">Todas</option>
+          <option value="Edad">Edad</option>
+          <option value="Tipo de Juguete">Tipo de Juguete</option>
+          <option value="Deportes y Aire Libre">Deportes y Aire Libre</option>
+          <option value="Ofertas">Ofertas</option>
+        </select>
+      </div>
+    
+      <div class="filter-group" id="subcategoria-container" style="display: none;">
+        <label for="subcategoria">Subcategoría:</label>
+        <select id="subcategoria">
+          <option value="">Todas</option>
+        </select>
+      </div>
+    
+      <div class="filter-group">
+        <button id="filtrar-btn">Filtrar</button>
+      </div>
+    </section>
+    
+
+    <div class="product-list" id="product-list">
+      <!-- Aquí se cargarán los productos desde MongoDB -->
+    </div>
+
+    <!-- Carrito Modal -->
+    <div id="cartModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Su Carrito</h2>
+        <div id="cartItems"></div>
+
+        <div class="cart-summary">
+          <p><strong>Subtotal:</strong> <span id="product-total">$0 COP</span></p>
+          <p><strong>Envío:</strong> <span id="shipping-cost">$10,000 COP</span></p>
+          <hr>
+          <p><strong>Total:</strong> <span id="total">$0 COP</span></p>
+          <button onclick="checkout()" class="checkout-button">Continuar compra</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    const subcategorias = {
+      "Edad": [
+        "Bebés (0-2 años)",
+        "Niños (3-6 años)",
+        "Mayores de 7 años"
+      ],
+      "Tipo de Juguete": [
+        "Muñecos y Figuras",
+        "Juegos de Mesa",
+        "Vehículos",
+        "Creativos y Educativos"
+      ]
+    };
+  
+    function obtenerParametrosURL() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        categoria: params.get("categoria") || "",
+        subcategoria: params.get("subcategoria") || ""
+      };
+    }
+  
+    function cargarSubcategorias(categoriaSeleccionada, subcategoriaSeleccionada = "") {
+      const subcatSelect = document.getElementById("subcategoria");
+      const subcatContainer = document.getElementById("subcategoria-container");
+  
+      subcatSelect.innerHTML = '<option value="">Todas</option>';
+  
+      if (subcategorias[categoriaSeleccionada]) {
+        subcatContainer.style.display = "block";
+        subcategorias[categoriaSeleccionada].forEach(sub => {
+          const option = document.createElement("option");
+          option.value = sub;
+          option.textContent = sub;
+          if (sub === subcategoriaSeleccionada) {
+            option.selected = true;
+          }
+          subcatSelect.appendChild(option);
+        });
+      } else {
+        subcatContainer.style.display = "none";
+      }
+    }
+  
+    function setupAuthUI() {
+      const usuario = JSON.parse(localStorage.getItem('usuarioLogueado'));
+      if (usuario && usuario.name) {
+        document.querySelectorAll('.auth-guest')
+          .forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.auth-user')
+          .forEach(el => el.style.display = 'inline-block');
+        document.getElementById('user-name').textContent = `Hola, ${usuario.name}`;
+        document.getElementById('logout-link').addEventListener('click', e => {
+          e.preventDefault();
+          localStorage.removeItem('token');
+          localStorage.removeItem('usuarioLogueado');
+          location.reload();
+        });
+      }
+    }
+  
+    function setupHamburgerMenu() {
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (hamburger && navLinks) {
+        hamburger.addEventListener('click', function () {
+          navLinks.classList.toggle('show');
+        });
+      }
+    }
+  
+    function renderizarProductos(productos) {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+  
+      if (productos.length === 0) {
+        productList.innerHTML = '<p>No se encontraron productos para esta categoría.</p>';
+        return;
+      }
+  
+      productos.forEach(product => {
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <img src="${product.imagen}" alt="${product.nombre}">
+          <h2>${product.nombre}</h2>
+          <p class="price">$${product.precio.toLocaleString('es-CO')}</p>
+          <button class="add-to-cart-button" onclick="addToCart('${product._id}', '${product.nombre}', ${product.precio}, '${product.imagen}')">Añadir al Carrito</button>
+        `;
+        productList.appendChild(card);
+      });
+    }
+  
+    function cargarProductos() {
+      const categoria = document.getElementById("categoria").value;
+      const subcategoria = document.getElementById("subcategoria").value;
+  
+      let url = "http://localhost:3001/api/products";
+  
+      if (subcategoria) {
+        url += `/subcategoria/${encodeURIComponent(subcategoria)}`;
+      } else if (categoria) {
+        url += `/categoria/${encodeURIComponent(categoria)}`;
+      }
+  
+      fetch(url)
+        .then(res => res.json())
+        .then(data => renderizarProductos(data))
+        .catch(err => {
+          console.error("Error al cargar productos:", err);
+          document.getElementById('product-list').innerHTML = '<p>Error al cargar productos.</p>';
+        });
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('header.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('header-container').innerHTML = html;
+          setupAuthUI();
+          setupHamburgerMenu(); // 👈 Agregado aquí para que funcione el botón hamburguesa
+        })
+        .catch(console.error);
+  
+      const { categoria, subcategoria } = obtenerParametrosURL();
+  
+      if (categoria) {
+        document.getElementById("categoria").value = categoria;
+        cargarSubcategorias(categoria, subcategoria);
+      }
+  
+      cargarProductos();
+  
+      document.getElementById('filtrar-btn').addEventListener('click', cargarProductos);
+    });
+  </script>  
+  <script src="js/cart.js"></script>
+
+  
+</body>
+</html>
+
