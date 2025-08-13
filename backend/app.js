@@ -9,10 +9,16 @@ const PORT = process.env.PORT || 3001;
 
 // Middlewares
 app.use(cors({
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500','http://localhost:3001'],
+  origin: [
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:3001',
+    'https://<tu-usuario>.github.io' // ← agrega tu dominio de GitHub Pages aquí
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+
 app.use(bodyParser.json());
 
 // Conexión a MongoDB
