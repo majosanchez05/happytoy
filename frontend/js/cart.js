@@ -1,3 +1,4 @@
+const API_URL = "https://happytoys-backend.onrender.com";
 const ENVIO_COSTO = 10000;
 
 function openCartModal() {
@@ -32,10 +33,8 @@ async function cargarCarrito(contenedorId) {
   }
 
   try {
-    const res = await fetch('http://localhost:3001/api/cart', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+    const res = await fetch(`${API_URL}/api/cart`, {
+      headers: { 'Authorization': `Bearer ${token}` }
     });
 
     if (!res.ok) throw new Error('Error al obtener el carrito');
@@ -68,8 +67,6 @@ function renderizarCarritoEnContenedor(carrito, contenedorId) {
     const item = document.createElement('div');
     item.classList.add('cart-item');
     const cantidad = p.cantidad || 1;
-    console.log("Producto:", p);
-    console.log("Precio:", p.precio, "Cantidad:", cantidad);
     subtotal += p.precio * cantidad;
 
     item.innerHTML = `
@@ -91,7 +88,6 @@ function renderizarCarritoEnContenedor(carrito, contenedorId) {
 
   actualizarTotales(subtotal);
 
-  // ✅ Esta parte DEBE ir aquí dentro
   contenedor.querySelectorAll('.increase').forEach(btn => {
     btn.addEventListener('click', async () => {
       const id = btn.getAttribute('data-id');
@@ -109,9 +105,7 @@ function renderizarCarritoEnContenedor(carrito, contenedorId) {
       }
     });
   });
-  
 }
-
 
 function actualizarTotales(subtotal) {
   const envio = ENVIO_COSTO;
@@ -133,11 +127,9 @@ async function eliminarDelCarrito(productoId, contenedorId = 'cartItems') {
   if (!token) return;
 
   try {
-    const res = await fetch(`http://localhost:3001/api/cart/eliminar/${productoId}`, {
+    const res = await fetch(`${API_URL}/api/cart/eliminar/${productoId}`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+      headers: { 'Authorization': `Bearer ${token}` }
     });
 
     if (res.ok) {
@@ -158,7 +150,7 @@ async function addToCart(productoId, nombre, precio, imagen) {
   }
 
   try {
-    const response = await fetch('http://localhost:3001/api/cart/agregar', {
+    const response = await fetch(`${API_URL}/api/cart/agregar`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -184,7 +176,7 @@ async function actualizarContadorCarrito() {
   if (!token) return;
 
   try {
-    const response = await fetch("http://localhost:3001/api/cart", {
+    const response = await fetch(`${API_URL}/api/cart`, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -211,11 +203,9 @@ async function checkout() {
   alert('Gracias por tu compra 🥳 (Aquí iría el flujo de pago)');
 
   try {
-    await fetch('http://localhost:3001/api/cart/limpiar', {
+    await fetch(`${API_URL}/api/cart/limpiar`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+      headers: { 'Authorization': `Bearer ${token}` }
     });
     await cargarCarrito('cartItems');
     actualizarContadorCarrito();
@@ -231,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function actualizarCantidadProducto(productoId, cantidad, contenedorId) {
   const token = localStorage.getItem('token');
   try {
-    const res = await fetch('http://localhost:3001/api/cart/actualizar', {
+    const res = await fetch(`${API_URL}/api/cart/actualizar`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
