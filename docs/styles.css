@@ -1389,11 +1389,28 @@ button:hover {
     margin-bottom: 20px;
 }
 
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow: hidden; /* Oculta contenido extra */
+}
+
+.carousel-container {
+    display: flex;
+    flex-direction: row; /* Horizontal */
+    overflow-x: auto; /* Scroll horizontal */
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 10px;
+}
 
 .carousel-slide {
-    flex: 0 0 auto;
+    flex: 0 0 auto; /* No se estira */
+    width: 250px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     background: white;
     border-radius: 10px;
@@ -1402,69 +1419,34 @@ button:hover {
 }
 
 .carousel-slide img {
-    width: 250px; /
+    width: 100%;
     height: auto;
     border-radius: 8px;
-    object-fit: cover; 
-}
-
-.carousel-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  overflow: hidden; /* 👈 importante para ocultar la barra */
-}
-
-.carousel-container {
-  display: flex;
-  overflow-x: hidden; /* 👈 importante */
-  scroll-behavior: smooth;
-  gap: 20px;
 }
 
 .carousel-btn {
-  background-color: #5ca435;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  z-index: 1;
-  padding: 10px;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  transition: background-color 0.3s;
-}
-
-.carousel-btn:hover {
-  background-color: #5ca435;
-}
-.carousel-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    overflow: hidden; /* 👈 importante para ocultar la barra */
-  }
-  
-  .carousel-container {
-    display: flex;
-    overflow-x: hidden; /* 👈 importante */
-    scroll-behavior: smooth;
-    gap: 20px;
-  }
-  
-.carousel-button.next {
-    right: 10px; /* Ajusta posición derecha */
-}
-
-.carousel-button.prev {
-    left: 10px; /* Ajusta posición izquierda */
+    background-color: #5ca435;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
 }
 
 .carousel-btn:hover {
     background-color: #5ca435;
 }
 
+.carousel-button.next {
+    right: 10px; /* Posición derecha */
+}
+
+.carousel-button.prev {
+    left: 10px; /* Posición izquierda */
+}
 
 @keyframes scroll {
     0% {
