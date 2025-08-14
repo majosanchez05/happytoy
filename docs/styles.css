@@ -1391,9 +1391,9 @@ button:hover {
 
 
 .carousel-slide {
-    flex: 0 0 auto; /* No se estira */
+    flex: 0 0 auto;
     display: flex;
-    flex-direction: column; /* Imagen y luego texto/botón */
+    flex-direction: row;
     align-items: center;
     background: white;
     border-radius: 10px;
@@ -1402,10 +1402,12 @@ button:hover {
 }
 
 .carousel-slide img {
-    width: 200px;
+    width: 250px; /
     height: auto;
     border-radius: 8px;
+    object-fit: cover; 
 }
+
 .carousel-wrapper {
   position: relative;
   display: flex;
